@@ -7,13 +7,10 @@ appVersion: v1.119.0
 home: https://immich.app/
 icon: https://raw.githubusercontent.com/immich-app/immich/main/design/immich-logo.svg
 sources:
-  - https://github.com/immich-app/immich-charts/tree/main/charts/immich
-  - https://github.com/immich-app/immich
+  - https://github.com/seaser0/immich-charts.git
 maintainers:
-  - name: PixelJonas
-    email: 5434875+PixelJonas@users.noreply.github.com
-  - name: bo0tzz
-    email: immich@bo0tzz.me
+  - name: Seaser0
+    email: seaser0@users.noreply.github.com
 dependencies:
   - name: common
     repository: https://bjw-s.github.io/helm-charts
