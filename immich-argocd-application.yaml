@@ -2,13 +2,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cnpg-database-immich
+  name: immich-application
   namespace: argocd
 spec:
   project: default
   destination:
     server: https://kubernetes.default.svc
-    namespace: cnpg01
+    namespace: immich
   syncPolicy:
       automated:
         prune: true
@@ -16,9 +16,9 @@ spec:
       syncOptions:
         - CreateNamespace=true
   source:
-    repoURL: 'https://git.nevit.ch:30008/seaser/cnpg-database.git'
+    path: charts/immich
+    repoURL: https://github.com/seaser0/immich-charts.git
     targetRevision: HEAD
-    path: cnpg-database-chart  # Path to the Helm chart within the repository
     helm:
       valueFiles:
-        - custom_values.yaml  # Values specific to the immich database
+        - custom_values.yaml
