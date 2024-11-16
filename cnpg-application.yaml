@@ -1,0 +1,24 @@
+# Argo CD Application for the Gitea Database
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cnpg-database-immich
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cnpg01
+  syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+        - CreateNamespace=true
+  source:
+    repoURL: 'https://git.nevit.ch:30008/seaser/cnpg-database.git'
+    targetRevision: HEAD
+    path: cnpg-database-chart  # Path to the Helm chart within the repository
+    helm:
+      valueFiles:
+        - custom_values.yaml  # Values specific to the immich database
