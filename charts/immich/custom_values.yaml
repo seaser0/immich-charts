@@ -50,14 +50,7 @@ postgresql:
   enabled: true
   image:
     repository: tensorchord/pgvecto-rs
-    tag: pg15-v0.3.0-rootless
-  resources:
-    requests:
-      cpu: 500m
-      memory: 2Gi
-    limits:
-      cpu: 1000m
-      memory: 4Gi
+    tag: pg14-v0.2.0
   global:
     postgresql:
       auth:
@@ -111,13 +104,6 @@ server:
         - hosts:
           - immich.nevit.ch  # Update this with your actual domain
           secretName: immich-secret-tls  # Your pre-created TLS secret
-  resources:
-    requests:
-      cpu: 500m
-      memory: 512Mi
-    limits:
-      cpu: 1
-      memory: 1Gi
 
 machine-learning:
   enabled: true
@@ -134,10 +120,3 @@ machine-learning:
       type: emptyDir
       accessMode: ReadWriteMany
       storageClass: nfs-csi
-  resources:
-    requests:
-      cpu: 1
-      memory: 2Gi
-    limits:
-      cpu: 2
-      memory: 4Gi
