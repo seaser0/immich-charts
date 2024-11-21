@@ -54,7 +54,7 @@ probes:
         port: http
       initialDelaySeconds: 0
       periodSeconds: 10
-      timeoutSeconds: 5
+      timeoutSeconds: 1
       failureThreshold: 5
   readiness: *probes
   startup:
@@ -64,9 +64,9 @@ probes:
       httpGet:
         path: /api/server/ping
         port: http
-      initialDelaySeconds: 0
+      initialDelaySeconds: 15
       periodSeconds: 10
-      timeoutSeconds: 5
+      timeoutSeconds: 1
       failureThreshold: 30
 
 persistence:
