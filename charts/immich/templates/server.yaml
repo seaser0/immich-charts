@@ -58,7 +58,7 @@ probes:
       failureThreshold: 5
   readiness: *probes
   startup:
-    enabled: true
+    enabled: false
     custom: true
     spec:
       httpGet:
