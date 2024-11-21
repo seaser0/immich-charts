@@ -66,7 +66,14 @@ postgresql:
           CREATE EXTENSION cube;
           CREATE EXTENSION earthdistance;
           CREATE EXTENSION vectors;
-
+  resources:
+    requests:
+      cpu: 1
+      memory: 2Gi
+    limits:
+      cpu: 2
+      memory: 4Gi
+      
 redis:
   enabled: true
   architecture: standalone
@@ -103,6 +110,13 @@ server:
         - hosts:
           - immich.nevit.ch  # Update this with your actual domain
           secretName: immich-secret-tls  # Your pre-created TLS secret
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 1
+      memory: 1Gi
 
 machine-learning:
   enabled: true
@@ -119,3 +133,10 @@ machine-learning:
       type: emptyDir
       accessMode: ReadWriteMany
       storageClass: nfs-csi
+  resources:
+    requests:
+      cpu: 1
+      memory: 2Gi
+    limits:
+      cpu: 2
+      memory: 4Gi
