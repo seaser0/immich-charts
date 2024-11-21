@@ -50,7 +50,7 @@ postgresql:
   enabled: true
   image:
     repository: tensorchord/pgvecto-rs
-    tag: pg15-v0.4.0
+    tag: pg15-v0.3.0-rootless
   resources:
     requests:
       cpu: 500m
