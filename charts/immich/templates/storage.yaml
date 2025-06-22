@@ -19,5 +19,5 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: immich-storage
   nfs:
-    path: /mnt/pool01/containers/immich
-    server: 192.168.1.100
+    path: /mnt/pool02/conatiner_pvc
+    server: truenas02.nevit.ch
