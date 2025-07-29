@@ -19,7 +19,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: immich-storage # A custom StorageClass for immich
   nfs:
-    path: /mnt/pool02/conatiner_pvc
+    path: /mnt/pool02/conatiner_pvc/dev/immich
     server: truenas02.nevit.ch
 ---
 apiVersion: v1
