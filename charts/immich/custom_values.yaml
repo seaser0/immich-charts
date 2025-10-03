@@ -60,6 +60,10 @@ postgresql:
 redis:
   enabled: true
   architecture: standalone
+  image:
+    registry: docker.io
+    repository: redis
+    tag: 7.4-bookworm  # Use 7.4-alpine for smaller image
   auth:
     enabled: false
 
