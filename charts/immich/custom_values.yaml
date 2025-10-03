@@ -47,8 +47,8 @@ immich:
       cpu: 500m
       memory: 512Mi
     limits:
-      cpu: "1"
-      memory: 1Gi
+      cpu: "2"
+      memory: 4Gi
 
 # ---------------------------
 # Dependencies
