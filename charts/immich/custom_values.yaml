@@ -36,6 +36,7 @@ image:
   tag: v2.0.0
 
 immich:
+  replicas: 3
   metrics:
     enabled: true
   persistence:
