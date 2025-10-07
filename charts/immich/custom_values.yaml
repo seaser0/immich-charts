@@ -73,6 +73,7 @@ redis:
 
 server:
   enabled: true
+  replicas: 3
   image:
     repository: ghcr.io/immich-app/immich-server
     pullPolicy: IfNotPresent
