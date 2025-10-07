@@ -37,17 +37,17 @@ image:
 
 immich:
   metrics:
-    enabled: false
+    enabled: true
   persistence:
     library:
       existingClaim: immich-data-pvc-prd
   configuration: {}
   resources:
     requests:
-      cpu: 500m
+      cpu: 1000m
       memory: 512Mi
     limits:
-      cpu: "2"
+      cpu: 4000m
       memory: 4Gi
 
 # ---------------------------
