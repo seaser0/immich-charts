@@ -73,7 +73,10 @@ redis:
 
 server:
   enabled: true
-  replicas: 3
+  # Use controller.replicas instead of replicaCount
+  controller:
+    replicas: 2
+    strategy: RollingUpdate  # Important for multiple replicas
   image:
     repository: ghcr.io/immich-app/immich-server
     pullPolicy: IfNotPresent
