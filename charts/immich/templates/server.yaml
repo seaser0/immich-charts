@@ -81,6 +81,20 @@ persistence:
     mountPath: /usr/src/app/upload
     existingClaim: {{ .Values.immich.persistence.library.existingClaim }}
 
+# ---------------------------
+# Patch: Lightroom external mount
+# ---------------------------
+{{- if .Values.server.lightroom.enabled }}
+extraVolumes:
+  - name: lightroom-library
+    persistentVolumeClaim:
+      claimName: {{ .Values.server.lightroom.existingClaim }}
+extraVolumeMounts:
+  - name: lightroom-library
+    mountPath: /external/lightroom
+    readOnly: {{ .Values.server.lightroom.readOnly | default true }}
+{{- end }}
+
 resources:
   requests:
     cpu: {{ .Values.immich.resources.requests.cpu | default "200m" }}
