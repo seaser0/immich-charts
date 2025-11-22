@@ -33,8 +33,8 @@ env:
 
 # Pin the app image you prefer
 image:
-  tag: v2.2.3
-
+  tag: v1.135.3
+  
 immich:
   metrics:
     enabled: true
@@ -73,8 +73,8 @@ redis:
 
 server:
   enabled: true
+  replicaCount: 2
   controller:
-    replicas: 2
     strategy: RollingUpdate
   image:
     repository: ghcr.io/immich-app/immich-server
@@ -101,7 +101,6 @@ server:
         - hosts:
           - immich.nevit.ch
           secretName: immich-secret-tls
-
 machine-learning:
   enabled: true
   image:
