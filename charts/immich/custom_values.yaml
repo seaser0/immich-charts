@@ -79,15 +79,23 @@ redis:
 # ---------------------------
 # Immich server
 # ---------------------------
-server:
   enabled: true
+  replicaCount: 2
   controller:
-    replicas: 2
     strategy: RollingUpdate
-
   image:
     repository: ghcr.io/immich-app/immich-server
     pullPolicy: IfNotPresent
+
+  extraVolumes:
+    - name: lightroom-library
+      persistentVolumeClaim:
+        claimName: immich-lightroom-pvc
+
+  extraVolumeMounts:
+    - name: lightroom-library
+      mountPath: /external/lightroom
+      readOnly: false
 
   ingress:
     main:
@@ -116,6 +124,16 @@ machine-learning:
   image:
     repository: ghcr.io/immich-app/immich-machine-learning
     pullPolicy: IfNotPresent
+
+  extraVolumes:
+    - name: lightroom-library
+      persistentVolumeClaim:
+        claimName: immich-lightroom-pvc
+
+  extraVolumeMounts:
+    - name: lightroom-library
+      mountPath: /external/lightroom
+      readOnly: true
 
   env:
     TRANSFORMERS_CACHE: /cache
