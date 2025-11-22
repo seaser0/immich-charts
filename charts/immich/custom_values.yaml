@@ -79,6 +79,7 @@ redis:
 # ---------------------------
 # Immich server
 # ---------------------------
+server:
   enabled: true
   replicaCount: 2
   controller:
