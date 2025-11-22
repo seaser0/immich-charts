@@ -33,9 +33,14 @@ env:
 
 # Pin the app image you prefer
 image:
-  tag: v2.2.3
+  tag: v2.3.1
   
 immich:
+  configuration:
+    publicUrl: https://immich.nevit.ch
+    serverUrl: http://immich-application-server:3001
+    webUrl: https://immich.nevit.ch
+    trustProxy: true
   metrics:
     enabled: true
   persistence:
