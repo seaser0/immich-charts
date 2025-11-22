@@ -2,6 +2,19 @@
 global:
   nameOverride: machine-learning
 
+{{- if .Values.lightroom.enabled }}
+extraVolumes:
+  - name: lightroom-library
+    persistentVolumeClaim:
+      claimName: {{ .Values.lightroom.existingClaim }}
+
+extraVolumeMounts:
+  - name: lightroom-library
+    mountPath: /external/lightroom
+    readOnly: {{ .Values.lightroom.readOnly }}
+{{- end }}
+
+
 service:
   main:
     enabled: true

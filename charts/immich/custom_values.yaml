@@ -87,16 +87,10 @@ server:
   image:
     repository: ghcr.io/immich-app/immich-server
     pullPolicy: IfNotPresent
-
-  extraVolumes:
-    - name: lightroom-library
-      persistentVolumeClaim:
-        claimName: immich-lightroom-pvc
-
-  extraVolumeMounts:
-    - name: lightroom-library
-      mountPath: /external/lightroom
-      readOnly: false
+  lightroom:
+    enabled: true
+    existingClaim: immich-lightroom-pvc
+    readOnly: false
 
   ingress:
     main:
@@ -126,15 +120,10 @@ machine-learning:
     repository: ghcr.io/immich-app/immich-machine-learning
     pullPolicy: IfNotPresent
 
-  extraVolumes:
-    - name: lightroom-library
-      persistentVolumeClaim:
-        claimName: immich-lightroom-pvc
-
-  extraVolumeMounts:
-    - name: lightroom-library
-      mountPath: /external/lightroom
-      readOnly: true
+  lightroom:
+    enabled: true
+    existingClaim: immich-lightroom-pvc
+    readOnly: true
 
   env:
     TRANSFORMERS_CACHE: /cache
