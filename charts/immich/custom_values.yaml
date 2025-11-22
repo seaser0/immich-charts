@@ -31,7 +31,7 @@ env:
         key: DB_PASSWORD
   IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
 
-# Pin the app image you prefer (you currently use v1.135.3)
+# Pin the app image you prefer
 image:
   tag: v2.2.3
 
@@ -63,7 +63,7 @@ redis:
   image:
     registry: docker.io
     repository: redis
-    tag: 7.4-bookworm  # Use 7.4-alpine for smaller image
+    tag: 7.4-bookworm
   auth:
     enabled: false
 
@@ -73,10 +73,9 @@ redis:
 
 server:
   enabled: true
-  # Use controller.replicas instead of replicaCount
   controller:
     replicas: 2
-    strategy: RollingUpdate  # Important for multiple replicas
+    strategy: RollingUpdate
   image:
     repository: ghcr.io/immich-app/immich-server
     pullPolicy: IfNotPresent
@@ -117,3 +116,21 @@ machine-learning:
       type: emptyDir
       accessMode: ReadWriteMany
       storageClass: nfs-csi
+
+# ---------------------------
+# Additional Lightroom Volume
+# ---------------------------
+
+global:
+  additionalVolumes:
+    - name: lightroom-library
+      persistentVolumeClaim:
+        claimName: immich-lightroom-pvc
+
+  additionalVolumeMounts:
+    server:
+      - name: lightroom-library
+        mountPath: /external/lightroom
+    machine-learning:
+      - name: lightroom-library
+        mountPath: /external/lightroom
