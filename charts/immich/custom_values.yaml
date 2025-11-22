@@ -146,17 +146,3 @@ machine-learning:
       accessMode: ReadWriteMany
       storageClass: nfs-csi
 
-
-# ---------------------------
-# Additional Lightroom Volume
-# ---------------------------
-global:
-  additionalVolumes:
-    - name: lightroom-library
-      persistentVolumeClaim:
-        claimName: immich-lightroom-pvc
-
-  additionalVolumeMounts:
-    server:
-      - name: lightroom-library
-        mountPath: /external/lightroom
