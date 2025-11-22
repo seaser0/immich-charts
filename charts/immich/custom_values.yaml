@@ -1,7 +1,6 @@
 # ===========================
 # External CNPG wiring
 # ===========================
-
 env:
   REDIS_HOSTNAME: '{{ printf "%s-redis-master" .Release.Name }}'
   DB_HOSTNAME:
@@ -31,22 +30,26 @@ env:
         key: DB_PASSWORD
   IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
 
-# Pin the app image you prefer
+# ===========================
+# Immich core configuration
+# ===========================
 image:
   tag: v2.3.1
-  
+
 immich:
   configuration:
     publicUrl: https://immich.nevit.ch
     serverUrl: http://immich-application-server:3001
     webUrl: https://immich.nevit.ch
     trustProxy: true
+
   metrics:
     enabled: true
+
   persistence:
     library:
       existingClaim: immich-data-pvc-prd
-  configuration: {}
+
   resources:
     requests:
       cpu: 100m
@@ -55,10 +58,10 @@ immich:
       cpu: 2000m
       memory: 1Gi
 
+
 # ---------------------------
 # Dependencies
 # ---------------------------
-
 postgresql:
   enabled: false
 
@@ -72,18 +75,20 @@ redis:
   auth:
     enabled: false
 
-# ---------------------------
-# Immich components
-# ---------------------------
 
+# ---------------------------
+# Immich server
+# ---------------------------
 server:
   enabled: true
-  replicaCount: 2
   controller:
+    replicas: 2
     strategy: RollingUpdate
+
   image:
     repository: ghcr.io/immich-app/immich-server
     pullPolicy: IfNotPresent
+
   ingress:
     main:
       enabled: true
@@ -95,24 +100,26 @@ server:
       hosts:
         - host: immich.nevit.ch
           paths:
-            - path: "/"
+            - path: /
               pathType: Prefix
-              backend:
-                service:
-                  name: immich-server
-                  port:
-                    name: https
       tls:
         - hosts:
-          - immich.nevit.ch
+            - immich.nevit.ch
           secretName: immich-secret-tls
+
+
+# ---------------------------
+# Machine Learning
+# ---------------------------
 machine-learning:
   enabled: true
   image:
     repository: ghcr.io/immich-app/immich-machine-learning
     pullPolicy: IfNotPresent
+
   env:
     TRANSFORMERS_CACHE: /cache
+
   persistence:
     cache:
       enabled: true
@@ -121,10 +128,10 @@ machine-learning:
       accessMode: ReadWriteMany
       storageClass: nfs-csi
 
+
 # ---------------------------
 # Additional Lightroom Volume
 # ---------------------------
-
 global:
   additionalVolumes:
     - name: lightroom-library
@@ -133,8 +140,5 @@ global:
 
   additionalVolumeMounts:
     server:
-      - name: lightroom-library
-        mountPath: /external/lightroom
-    machine-learning:
       - name: lightroom-library
         mountPath: /external/lightroom
