@@ -83,6 +83,7 @@ persistence:
   external:
     enabled: true
     existingClaim: immich-lightroom-pvc
+    mountPath: /external/lightroom
     readOnly: true
 
 resources:
