@@ -56,7 +56,7 @@ immich:
       memory: 512Mi
     limits:
       cpu: 2000m
-      memory: 1Gi
+      memory: 4Gi
 
 
 # ---------------------------
@@ -81,7 +81,8 @@ redis:
 # ---------------------------
 server:
   enabled: true
-  replicaCount: 2
+  controller:
+    replicas: 4
   controller:
     strategy: RollingUpdate
   image:
