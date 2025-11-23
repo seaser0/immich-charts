@@ -117,13 +117,6 @@ machine-learning:
   image:
     repository: ghcr.io/immich-app/immich-machine-learning
     pullPolicy: IfNotPresent
-  resources:
-    requests:
-      memory: "2Gi"
-      cpu: "500m"
-    limits:
-      memory: "3Gi"
-      cpu: "2000m"
 
   env:
     TRANSFORMERS_CACHE: /cache
