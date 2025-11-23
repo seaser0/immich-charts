@@ -87,12 +87,6 @@ server:
   image:
     repository: ghcr.io/immich-app/immich-server
     pullPolicy: IfNotPresent
-    
-  persistence:
-    external:
-      enabled: true
-      existingClaim: immich-lightroom-pvc
-      readOnly: true
 
   ingress:
     main:
@@ -132,7 +126,3 @@ machine-learning:
       type: emptyDir
       accessMode: ReadWriteMany
       storageClass: nfs-csi
-    external:
-      enabled: true
-      existingClaim: immich-lightroom-pvc
-      readOnly: true
