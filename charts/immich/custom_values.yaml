@@ -83,7 +83,6 @@ server:
   enabled: true
   controller:
     replicas: 4
-  controller:
     strategy: RollingUpdate
   image:
     repository: ghcr.io/immich-app/immich-server
