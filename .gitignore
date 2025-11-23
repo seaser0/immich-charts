@@ -7,3 +7,25 @@ __snapshot__/
 
 # Docs
 _site/
+
+# ---- macOS ----
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# ---- Windows ----
+Thumbs.db
+Thumbs.db:encryptable
+Desktop.ini
+$RECYCLE.BIN/
+ehthumbs.db
+ehthumbs_vista.db
+
+# ---- Common temporary files ----
+*.tmp
+*.temp

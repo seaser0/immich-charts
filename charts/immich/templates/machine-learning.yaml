@@ -2,18 +2,19 @@
 global:
   nameOverride: machine-learning
 
-{{- if .Values.lightroom.enabled }}
+{{- $ml := index .Values "machine-learning" }}
+{{- if and $ml.lightroom $ml.lightroom.enabled }}
+
 extraVolumes:
   - name: lightroom-library
     persistentVolumeClaim:
-      claimName: {{ .Values.lightroom.existingClaim }}
+      claimName: {{ $ml.lightroom.existingClaim }}
 
 extraVolumeMounts:
   - name: lightroom-library
     mountPath: /external/lightroom
-    readOnly: {{ .Values.lightroom.readOnly }}
+    readOnly: {{ $ml.lightroom.readOnly }}
 {{- end }}
-
 
 service:
   main:
@@ -39,12 +40,13 @@ probes:
       periodSeconds: 10
       timeoutSeconds: 1
       failureThreshold: 3
+
   readiness: *probes
+
   startup:
     enabled: false
 {{- end }}
 
-{{- /* Have to reference with index here because the dash breaks a normal dereference */}}
 {{ if (index .Values "machine-learning").enabled }}
 {{- $ctx := deepCopy . -}}
 {{- $_ := get .Values "machine-learning" | mergeOverwrite $ctx.Values -}}
