@@ -54,9 +54,9 @@ immich:
     requests:
       cpu: 100m
       memory: 512Mi
-    limits:
-      cpu: 2000m
-      memory: 4Gi
+  #  limits:
+  #    cpu: 2000m
+  #    memory: 4Gi
 
 
 # ---------------------------
@@ -113,6 +113,8 @@ server:
 # ---------------------------
 machine-learning:
   enabled: true
+  controller:
+    replicas: 2
   image:
     repository: ghcr.io/immich-app/immich-machine-learning
     pullPolicy: IfNotPresent
