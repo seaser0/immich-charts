@@ -21,8 +21,8 @@ resources:
     memory: "512Mi"
     cpu: "200m"
   limits:
-    memory: "3Gi"
-    cpu: "2000m"
+    memory: "2Gi"
+    cpu: "4000m"
 
 probes:
   liveness: &probes
