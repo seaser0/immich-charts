@@ -3,18 +3,6 @@ global:
   nameOverride: machine-learning
 
 {{- $ml := index .Values "machine-learning" }}
-{{- if and $ml.lightroom $ml.lightroom.enabled }}
-
-extraVolumes:
-  - name: lightroom-library
-    persistentVolumeClaim:
-      claimName: {{ $ml.lightroom.existingClaim }}
-
-extraVolumeMounts:
-  - name: lightroom-library
-    mountPath: /external/lightroom
-    readOnly: {{ $ml.lightroom.readOnly }}
-{{- end }}
 
 service:
   main:
