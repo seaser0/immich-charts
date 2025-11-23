@@ -128,3 +128,11 @@ machine-learning:
       type: emptyDir
       accessMode: ReadWriteMany
       storageClass: nfs-csi
+
+microservices:
+  concurrency:
+    clip: 4
+    facial_recognition: 4
+    thumbnail: 4
+    metadata: 4
+    ocr: 4
