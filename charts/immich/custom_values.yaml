@@ -42,6 +42,14 @@ immich:
     serverUrl: http://immich-application-server:3001
     webUrl: https://immich.nevit.ch
     trustProxy: true
+    microservices:
+      concurrency:
+        clip: 4
+        facial_recognition: 4
+        thumbnail: 4
+        metadata: 4
+        ocr: 4
+
 
   metrics:
     enabled: true
@@ -128,11 +136,3 @@ machine-learning:
       type: emptyDir
       accessMode: ReadWriteMany
       storageClass: nfs-csi
-
-microservices:
-  concurrency:
-    clip: 4
-    facial_recognition: 4
-    thumbnail: 4
-    metadata: 4
-    ocr: 4
