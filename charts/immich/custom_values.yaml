@@ -82,7 +82,7 @@ redis:
 server:
   enabled: true
   controller:
-    replicas: 4
+    replicas: 2
     strategy: RollingUpdate
   image:
     repository: ghcr.io/immich-app/immich-server
