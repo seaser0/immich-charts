@@ -41,15 +41,30 @@ immich:
     publicUrl: https://immich.nevit.ch
     serverUrl: http://immich-application-server:3001
     webUrl: https://immich.nevit.ch
+    logging:
+      enable: true
+      level: info
+    job:
+      backgroundTask:
+        concurrency: 5
+      faceDetection:
+        concurrency: 5
+      library:
+        concurrency: 5
     trustProxy: true
+    trash:
+      enable: true
+      days: 40
+    backup:
+      database:
+        enabled: false
     microservices:
       concurrency:
-        clip: 4
-        facial_recognition: 4
-        thumbnail: 4
-        metadata: 4
-        ocr: 4
-
+        clip: 5
+        facial_recognition: 5
+        metadata: 5
+        ocr: 5
+        thumbnail: 5
 
   metrics:
     enabled: true
