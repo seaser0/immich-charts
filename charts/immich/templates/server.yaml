@@ -81,10 +81,12 @@ persistence:
     mountPath: /usr/src/app/upload
     existingClaim: {{ .Values.immich.persistence.library.existingClaim }}
   external:
-    enabled: true
-    existingClaim: immich-lightroom-pvc
-    mountPath: /external/lightroom
-    readOnly: true
+    - existingClaim: immich-lightroom-pvc
+      mountPath: /external/lightroom
+      readOnly: true
+    - existingClaim: immich-fotos-mirjam-pvc
+      mountPath: /external/lightroom
+      readOnly: true
 
 resources:
   requests:
