@@ -80,13 +80,19 @@ persistence:
     enabled: true
     mountPath: /usr/src/app/upload
     existingClaim: {{ .Values.immich.persistence.library.existingClaim }}
-  external:
-    - existingClaim: immich-lightroom-pvc
-      mountPath: /external/lightroom
-      readOnly: true
-    - existingClaim: immich-fotos-mirjam-pvc
-      mountPath: /external/lightroom
-      readOnly: true
+    
+  # External PVCs must be a map, not a list
+  external-lightroom:
+    enabled: true
+    existingClaim: immich-lightroom-pvc
+    mountPath: /external/lightroom
+    readOnly: true
+
+  external-mirjam:
+    enabled: true
+    existingClaim: immich-fotos-mirjam-pvc
+    mountPath: /external/mirjam
+    readOnly: true
 
 resources:
   requests:
