@@ -41,8 +41,6 @@ immich:
     publicUrl: https://immich.nevit.ch
     serverUrl: http://immich-application-server:3001
     webUrl: https://immich.nevit.ch
-    logging:
-      level: info
     job:
       backgroundTask:
         concurrency: 5
