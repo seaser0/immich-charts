@@ -37,94 +37,94 @@ image:
   tag: v2.3.1
 
 immich:
-  configuration:
-    # ---------------------------------------------------------
-    # Core URLs
-    # ---------------------------------------------------------
-    publicUrl: "https://immich.nevit.ch"
-    serverUrl: "http://immich-application-server:3001"
-    webUrl: "https://immich.nevit.ch"
-    trustProxy: true
+  # configuration:
+  #   # ---------------------------------------------------------
+  #   # Core URLs
+  #   # ---------------------------------------------------------
+  #   publicUrl: "https://immich.nevit.ch"
+  #   serverUrl: "http://immich-application-server:3001"
+  #   webUrl: "https://immich.nevit.ch"
+  #   trustProxy: true
 
-    # ---------------------------------------------------------
-    # Job Concurrency Configuration
-    # ---------------------------------------------------------
-    job:
-      backgroundTask:
-        concurrency: 5
-      faceDetection:
-        concurrency: 5
-      library:
-        concurrency: 5
-      metadataExtraction:
-        concurrency: 5
-      ocr:
-        concurrency: 5
-      thumbnailGeneration:
-        concurrency: 5
+  #   # ---------------------------------------------------------
+  #   # Job Concurrency Configuration
+  #   # ---------------------------------------------------------
+  #   job:
+  #     backgroundTask:
+  #       concurrency: 5
+  #     faceDetection:
+  #       concurrency: 5
+  #     library:
+  #       concurrency: 5
+  #     metadataExtraction:
+  #       concurrency: 5
+  #     ocr:
+  #       concurrency: 5
+  #     thumbnailGeneration:
+  #       concurrency: 5
 
-    # ---------------------------------------------------------
-    # Trash / Deletion Policy
-    # ---------------------------------------------------------
-    trash:
-      days: 40
+  #   # ---------------------------------------------------------
+  #   # Trash / Deletion Policy
+  #   # ---------------------------------------------------------
+  #   trash:
+  #     days: 40
 
-    # ---------------------------------------------------------
-    # Backup Configuration (disabled)
-    # ---------------------------------------------------------
-    backup:
-      database:
-        enabled: false
+  #   # ---------------------------------------------------------
+  #   # Backup Configuration (disabled)
+  #   # ---------------------------------------------------------
+  #   backup:
+  #     database:
+  #       enabled: false
 
-    # ---------------------------------------------------------
-    # SMTP / Email Notifications
-    # (Gmail configuration)
-    # ---------------------------------------------------------
-    notifications:
-      smtp:
-        enabled: true
-        host: "smtp.gmail.com"
-        port: 587
-        username: "s34s3r@gmail.com"
-        sender: "s34s3r@gmail.com"
+  #   # ---------------------------------------------------------
+  #   # SMTP / Email Notifications
+  #   # (Gmail configuration)
+  #   # ---------------------------------------------------------
+  #   notifications:
+  #     smtp:
+  #       enabled: true
+  #       host: "smtp.gmail.com"
+  #       # port: 587
+  #       # username: "s34s3r@gmail.com"
+  #       # sender: "s34s3r@gmail.com"
 
-        # leave empty to inject using Kubernetes Secrets
-        password: "mvwocvjuilmkaaat"
+  #       # # leave empty to inject using Kubernetes Secrets
+  #       # password: "mvwocvjuilmkaaat"
 
-        # TLS required for Gmail
-        requireTls: true
+  #       # # TLS required for Gmail
+  #       # requireTls: true
 
-        # Gmail-specific
-        rejectUnauthorized: true
+  #       # # Gmail-specific
+  #       # rejectUnauthorized: true
 
-    # ---------------------------------------------------------
-    # Defaults Included (recommended to keep)
-    # ---------------------------------------------------------
-    #ffmpeg:
-    #  threads: 0
-    #  preset: "veryfast"
-    #  targetResolution: "1080"
-    #  transcode: true
-    #  colorspaceConversion: true
+  #   # ---------------------------------------------------------
+  #   # Defaults Included (recommended to keep)
+  #   # ---------------------------------------------------------
+  #   #ffmpeg:
+  #   #  threads: 0
+  #   #  preset: "veryfast"
+  #   #  targetResolution: "1080"
+  #   #  transcode: true
+  #   #  colorspaceConversion: true
 
-    #map:
-    #  enabled: true
-    #  darkStyleUrl: ""
-    #  lightStyleUrl: ""
+  #   #map:
+  #   #  enabled: true
+  #   #  darkStyleUrl: ""
+  #   #  lightStyleUrl: ""
 
-    oauth:
-      enabled: false
-      autoLaunch: false
+  #   oauth:
+  #     enabled: false
+  #     autoLaunch: false
 
-    reverseGeocoding:
-      enabled: true
+  #   reverseGeocoding:
+  #     enabled: true
 
-    #storageTemplate:
-    #  enabled: true
-    #  template: "{{y}}/{{y}}-{{MM}}-{{dd}}/{{filename}}"
+  #   #storageTemplate:
+  #   #  enabled: true
+  #   #  template: "{{y}}/{{y}}-{{MM}}-{{dd}}/{{filename}}"
 
-    trashBin:
-      enabled: true
+  #   trashBin:
+  #     enabled: true
 
     # Keep feature flags untouched (Immich computes them)
 
