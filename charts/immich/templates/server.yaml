@@ -86,13 +86,13 @@ persistence:
     enabled: true
     existingClaim: immich-lightroom-pvc
     mountPath: /external/lightroom
-    readOnly: true
+    readOnly: false
 
   external-mirjam:
     enabled: true
     existingClaim: immich-fotos-mirjam-pvc
     mountPath: /external/mirjam_fotos
-    readOnly: true
+    readOnly: false
 
 resources:
   requests:
