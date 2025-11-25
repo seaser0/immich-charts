@@ -61,7 +61,7 @@ immich:
     backup:
       database:
         enabled: false
-
+    email: true
 
   metrics:
     enabled: true
