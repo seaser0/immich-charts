@@ -38,12 +38,10 @@ image:
 
 immich:
   configuration:
-  server:
-    publicUrl: https://immich.nevit.ch
-    externalDomain: https://immich.nevit.ch
-    loginPageMessage: "Welcome to IMMICH hosted by Nevit"
-    publicUsers: true
-    trustProxy: true
+    server:
+      publicUrl: https://immich.nevit.ch
+      serverUrl: http://immich-application-server:3001
+      webUrl: https://immich.nevit.ch
     job:
       backgroundTask:
         concurrency: 5
@@ -57,11 +55,13 @@ immich:
         concurrency: 5
       thumbnailGeneration:
         concurrency: 5
+    trustProxy: true
     trash:
       days: 40
     backup:
       database:
         enabled: false
+
 
   metrics:
     enabled: true
