@@ -232,9 +232,3 @@ machine-learning:
       accessMode: ReadWriteMany
       # storageClass: your-class
 
-# ---------------------------
-# Dependencies
-# ---------------------------
-postgresql:
-  enabled: false
-  
