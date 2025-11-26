@@ -109,6 +109,13 @@ server:
           image:
             repository: ghcr.io/immich-app/immich-server
             pullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 600m
+              memory: 1.5Gi
+            limits:
+              cpu: 1500m
+              memory: 4Gi
 
   ingress:
       main:
@@ -132,7 +139,7 @@ server:
 
 machine-learning:
   enabled: true
-  
+
   resources:
     requests:
       cpu: 500m
