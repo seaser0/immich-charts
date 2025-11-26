@@ -180,7 +180,6 @@ valkey:
       storageClass: nfs-csi
 
 # Immich components
-
 server:
   enabled: true
   controllers:
@@ -190,7 +189,6 @@ server:
           image:
             repository: ghcr.io/immich-app/immich-server
             pullPolicy: IfNotPresent
-  ingress:
   ingress:
       main:
         enabled: true
@@ -209,6 +207,7 @@ server:
           - hosts:
               - immich.nevit.ch
             secretName: immich-secret-tls
+
 
 machine-learning:
   enabled: true
