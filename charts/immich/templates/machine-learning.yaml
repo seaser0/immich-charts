@@ -2,11 +2,45 @@
 global:
   nameOverride: machine-learning
 
-{{- $ml := index .Values "machine-learning" }}
+controllers:
+  main:
+    type: deployment
+    strategy: RollingUpdate
+    containers:
+      main:
+        ports:
+          - name: http
+            containerPort: 3003
+            protocol: TCP
+        probes:
+          liveness: &probes
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /ping
+                port: http
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness: *probes
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /ping
+                port: http
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 60
 
 service:
   main:
     enabled: true
+    controller: main
     primary: true
     type: ClusterIP
     ports:
@@ -14,6 +48,7 @@ service:
         enabled: true
         primary: true
         port: 3003
+        targetPort: http
         protocol: HTTP
 
 resources:
@@ -24,25 +59,15 @@ resources:
     memory: "2560Gi"
     cpu: "3500m"
 
-probes:
-  liveness: &probes
-    enabled: true
-    custom: true
-    spec:
-      httpGet:
-        path: /ping
-        port: http
-      initialDelaySeconds: 0
-      periodSeconds: 10
-      timeoutSeconds: 1
-      failureThreshold: 3
+autoScaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80
 
-  readiness: *probes
-
-  startup:
-    enabled: false
 {{- end }}
 
+{{- /* Have to reference with index here because the dash breaks a normal dereference */}}
 {{ if (index .Values "machine-learning").enabled }}
 {{- $ctx := deepCopy . -}}
 {{- $_ := get .Values "machine-learning" | mergeOverwrite $ctx.Values -}}
