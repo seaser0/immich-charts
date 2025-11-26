@@ -100,10 +100,10 @@ persistence:
     type: configMap
     name: {{ .Release.Name }}-immich-config
 {{- end }}
-  library:
+  data:
     enabled: true
-    mountPath: /usr/src/app/upload
     existingClaim: {{ .Values.immich.persistence.library.existingClaim }}
+{{- end }}
 
   # External PVCs must be a map, not a list
   external-lightroom:
