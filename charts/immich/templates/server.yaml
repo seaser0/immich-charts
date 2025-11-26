@@ -103,15 +103,11 @@ persistence:
   data:
     enabled: true
     existingClaim: {{ .Values.immich.persistence.library.existingClaim }}
-{{- end }}
-
-  # External PVCs must be a map, not a list
   external-lightroom:
     enabled: true
     existingClaim: immich-lightroom-pvc
     mountPath: /external/lightroom
     readOnly: false
-
   external-mirjam:
     enabled: true
     existingClaim: immich-fotos-mirjam-pvc
@@ -125,7 +121,6 @@ resources:
   limits:
     cpu: {{ .Values.immich.resources.limits.cpu | default "500m" }}
     memory: {{ .Values.immich.resources.limits.memory | default "2048Mi" }}
-
 {{- end }}
 
 
