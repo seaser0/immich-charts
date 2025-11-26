@@ -120,11 +120,11 @@ persistence:
 
 resources:
   requests:
-    cpu: {{ .Values.immich.resources.requests.cpu | default "200m" }}
+    cpu: {{ .Values.immich.resources.requests.cpu | default "100m" }}
     memory: {{ .Values.immich.resources.requests.memory | default "256Mi" }}
   limits:
     cpu: {{ .Values.immich.resources.limits.cpu | default "500m" }}
-    memory: {{ .Values.immich.resources.limits.memory | default "512Mi" }}
+    memory: {{ .Values.immich.resources.limits.memory | default "2048Mi" }}
 
 {{- end }}
 
