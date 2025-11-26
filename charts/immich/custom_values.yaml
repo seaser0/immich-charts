@@ -1,42 +1,75 @@
-# ===========================
-# External CNPG wiring
-# ===========================
-env:
-  REDIS_HOSTNAME: '{{ printf "%s-redis-master" .Release.Name }}'
-  DB_HOSTNAME:
-    valueFrom:
-      secretKeyRef:
-        name: immich-db
-        key: DB_HOST
-  DB_PORT:
-    valueFrom:
-      secretKeyRef:
-        name: immich-db
-        key: DB_PORT
-  DB_USERNAME:
-    valueFrom:
-      secretKeyRef:
-        name: immich-db
-        key: DB_USERNAME
-  DB_DATABASE_NAME:
-    valueFrom:
-      secretKeyRef:
-        name: immich-db
-        key: DB_NAME
-  DB_PASSWORD:
-    valueFrom:
-      secretKeyRef:
-        name: immich-db
-        key: DB_PASSWORD
-  IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
+## This chart relies on the common library chart from bjw-s
+## You can find it at https://github.com/bjw-s-labs/helm-charts/tree/common-4.3.0/charts/library/common
+## Refer there for more detail about the supported values
 
-# ===========================
-# Immich core configuration
-# ===========================
-image:
-  tag: v2.3.1
+# These entries are shared between all the Immich components
+
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          tag: v2.3.1
+        env:
+          REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
+          IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
+          # Add the env vars to connect to your database here.
+
+          # ===========================
+          # External CNPG wiring
+          # ===========================
+          DB_HOSTNAME:
+            valueFrom:
+              secretKeyRef:
+                name: immich-db
+                key: DB_HOST
+          DB_PORT:
+            valueFrom:
+              secretKeyRef:
+                name: immich-db
+                key: DB_PORT
+          DB_USERNAME:
+            valueFrom:
+              secretKeyRef:
+                name: immich-db
+                key: DB_USERNAME
+          DB_DATABASE_NAME:
+            valueFrom:
+              secretKeyRef:
+                name: immich-db
+                key: DB_NAME
+          DB_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: immich-db
+                key: DB_PASSWORD
+
 
 immich:
+  metrics:
+    # Enabling this will create the service monitors needed to monitor immich with the prometheus operator
+    enabled: true
+
+  persistence:
+    library:
+      existingClaim: immich-data-pvc-prd
+
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 8Gi
+
+  configuration: {}
+    # trash:
+    #   enabled: false
+    #   days: 30
+    # storageTemplate:
+    #   enabled: true
+    #   template: "{{y}}/{{y}}-{{MM}}-{{dd}}/{{filename}}"
+
   # configuration:
   #   # ---------------------------------------------------------
   #   # Core URLs
@@ -126,90 +159,82 @@ immich:
   #   trashBin:
   #     enabled: true
 
-    # Keep feature flags untouched (Immich computes them)
-
-  metrics:
-    enabled: true
-
+# Dependencies
+valkey:
+  enabled: false
+  controllers:
+    main:
+      containers:
+        main:
+          image:
+            repository: docker.io/valkey/valkey
+            tag: 9.0-alpine@sha256:b4ee67d73e00393e712accc72cfd7003b87d0fcd63f0eba798b23251bfc9c394
+            pullPolicy: IfNotPresent
   persistence:
-    library:
-      existingClaim: immich-data-pvc-prd
+    data:
+      enabled: true
+      size: 1Gi
+      # Optional: Set this to persistentVolumeClaim to keep job queues persistent
+      type: emptyDir
+      accessMode: ReadWriteOnce
+      storageClass: nfs-csi
 
-  resources:
-    requests:
-      cpu: 250m
-      memory: 1Gi
-    limits:
-      cpu: 2000m
-      memory: 8Gi
+# Immich components
 
+server:
+  enabled: true
+  controllers:
+    main:
+      containers:
+        main:
+          image:
+            repository: ghcr.io/immich-app/immich-server
+            pullPolicy: IfNotPresent
+  ingress:
+  ingress:
+      main:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-prod
+          nginx.ingress.kubernetes.io/backend-protocol: HTTP
+          # proxy-body-size is set to 0 to remove the body limit on file uploads
+          nginx.ingress.kubernetes.io/proxy-body-size: "0"
+        hosts:
+          - host: immich.nevit.ch
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - immich.nevit.ch
+            secretName: immich-secret-tls
+
+machine-learning:
+  enabled: true
+  controllers:
+    main:
+      containers:
+        main:
+          image:
+            repository: ghcr.io/immich-app/immich-machine-learning
+            pullPolicy: IfNotPresent
+          env:
+            TRANSFORMERS_CACHE: /cache
+            HF_XET_CACHE: /cache/huggingface-xet
+            MPLCONFIGDIR: /cache/matplotlib-config
+  persistence:
+    cache:
+      enabled: true
+      size: 10Gi
+      # Optional: Set this to persistentVolumeClaim to avoid downloading the ML models every start.
+      type: emptyDir
+      accessMode: ReadWriteMany
+      # storageClass: your-class
 
 # ---------------------------
 # Dependencies
 # ---------------------------
 postgresql:
   enabled: false
-
-redis:
-  enabled: true
-  architecture: standalone
-  image:
-    registry: docker.io
-    repository: redis
-    tag: 7.4-bookworm
-  auth:
-    enabled: false
-
-
-# ---------------------------
-# Immich server
-# ---------------------------
-server:
-  enabled: true
-  controller:
-    replicas: 2
-    strategy: RollingUpdate
-  image:
-    repository: ghcr.io/immich-app/immich-server
-    pullPolicy: IfNotPresent
-
-  ingress:
-    main:
-      enabled: true
-      ingressClassName: nginx
-      annotations:
-        nginx.ingress.kubernetes.io/proxy-body-size: "0"
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-        nginx.ingress.kubernetes.io/backend-protocol: HTTP
-      hosts:
-        - host: immich.nevit.ch
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - hosts:
-            - immich.nevit.ch
-          secretName: immich-secret-tls
-
-
-# ---------------------------
-# Machine Learning
-# ---------------------------
-machine-learning:
-  enabled: true
-  controller:
-    replicas: 2
-  image:
-    repository: ghcr.io/immich-app/immich-machine-learning
-    pullPolicy: IfNotPresent
-
-  env:
-    TRANSFORMERS_CACHE: /cache
-
-  persistence:
-    cache:
-      enabled: true
-      size: 10Gi
-      type: emptyDir
-      accessMode: ReadWriteMany
-      storageClass: nfs-csi
+  

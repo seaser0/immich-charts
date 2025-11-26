@@ -2,22 +2,66 @@
 global:
   nameOverride: server
 
-env:
-  {{ if .Values.immich.metrics.enabled }}
-      IMMICH_TELEMETRY_INCLUDE: all
-  {{ end }}
-  {{- if .Values.immich.configuration }}
-      IMMICH_CONFIG_FILE: /config/immich-config.yaml
-  {{- end }}
-
 {{- if .Values.immich.configuration }}
-podAnnotations:
-  checksum/config: {{ .Values.immich.configuration | toYaml | sha256sum }}
+defaultPodOptions:
+  annotations:
+    checksum/config: {{ .Values.immich.configuration | toYaml | sha256sum }}
 {{- end }}
+
+controllers:
+  main:
+    type: deployment
+    strategy: RollingUpdate
+    containers:
+      main:
+        env:
+          {{ if .Values.immich.metrics.enabled }}
+          IMMICH_TELEMETRY_INCLUDE: all
+          {{ end }}
+          {{- if .Values.immich.configuration }}
+          IMMICH_CONFIG_FILE: /config/immich-config.yaml
+          {{- end }}
+        ports:
+          - name: http
+            containerPort: 2283
+            protocol: TCP
+          {{- if .Values.immich.metrics.enabled }}
+          - name: metrics-api
+            containerPort: 8081
+            protocol: TCP
+          - name: metrics-ms
+            containerPort: 8082
+            protocol: TCP
+          {{- end }}
+        probes:
+          liveness: &probes
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/server/ping
+                port: http
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness: *probes
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/server/ping
+                port: http
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 30
 
 service:
   main:
     enabled: true
+    controller: main
     primary: true
     type: ClusterIP
     ports:
@@ -25,15 +69,19 @@ service:
         enabled: true
         primary: true
         port: 2283
+        targetPort: http
         protocol: HTTP
       metrics-api:
         enabled: {{ .Values.immich.metrics.enabled }}
         port: 8081
+        targetPort: metrics-api
         protocol: HTTP
       metrics-ms:
         enabled: {{ .Values.immich.metrics.enabled }}
         port: 8082
+        targetPort: metrics-ms
         protocol: HTTP
+
 
 serviceMonitor:
   main:
@@ -44,30 +92,6 @@ serviceMonitor:
       - port: metrics-ms
         scheme: http
 
-probes:
-  liveness: &probes
-    enabled: false
-    custom: true
-    spec:
-      httpGet:
-        path: /api/server/ping
-        port: http
-      initialDelaySeconds: 0
-      periodSeconds: 10
-      timeoutSeconds: 1
-      failureThreshold: 5
-  readiness: *probes
-  startup:
-    enabled: false
-    custom: true
-    spec:
-      httpGet:
-        path: /api/server/ping
-        port: http
-      initialDelaySeconds: 15
-      periodSeconds: 10
-      timeoutSeconds: 1
-      failureThreshold: 30
 
 persistence:
 {{- if .Values.immich.configuration }}
@@ -103,6 +127,7 @@ resources:
     memory: {{ .Values.immich.resources.limits.memory | default "512Mi" }}
 
 {{- end }}
+
 
 {{ if .Values.server.enabled }}
 {{- $ctx := deepCopy . -}}
