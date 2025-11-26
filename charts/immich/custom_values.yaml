@@ -131,6 +131,8 @@ server:
 
 
 machine-learning:
+  enabled: true
+  
   resources:
     requests:
       cpu: 500m
