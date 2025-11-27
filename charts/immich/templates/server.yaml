@@ -12,25 +12,8 @@ controllers:
   main:
     type: deployment
     strategy: RollingUpdate
-
-    # ---------------------------
-    # Passthrough: extra volumes
-    # ---------------------------
-    extraVolumes:
-{{- if .Values.server.controllers.main.extraVolumes }}
-{{ toYaml .Values.server.controllers.main.extraVolumes | indent 6 }}
-{{- end }}
-
     containers:
       main:
-        # ---------------------------
-        # Passthrough: extra mounts
-        # ---------------------------
-        extraVolumeMounts:
-{{- if .Values.server.controllers.main.extraVolumeMounts }}
-{{ toYaml .Values.server.controllers.main.extraVolumeMounts | indent 10 }}
-{{- end }}
-
         env:
           {{ if .Values.immich.metrics.enabled }}
           IMMICH_TELEMETRY_INCLUDE: all
@@ -38,7 +21,6 @@ controllers:
           {{- if .Values.immich.configuration }}
           IMMICH_CONFIG_FILE: /config/immich-config.yaml
           {{- end }}
-
         ports:
           - name: http
             containerPort: 2283
@@ -51,7 +33,6 @@ controllers:
             containerPort: 8082
             protocol: TCP
           {{- end }}
-
         probes:
           liveness: &probes
             enabled: true
@@ -101,6 +82,7 @@ service:
         targetPort: metrics-ms
         protocol: HTTP
 
+
 serviceMonitor:
   main:
     enabled: {{ .Values.immich.metrics.enabled }}
@@ -109,6 +91,7 @@ serviceMonitor:
         scheme: http
       - port: metrics-ms
         scheme: http
+
 
 persistence:
 {{- if .Values.immich.configuration }}
@@ -120,6 +103,16 @@ persistence:
   data:
     enabled: true
     existingClaim: {{ .Values.immich.persistence.library.existingClaim }}
+  external-lightroom:
+    enabled: true
+    existingClaim: immich-lightroom-pvc
+    mountPath: /external/lightroom
+    readOnly: false
+  external-mirjam:
+    enabled: true
+    existingClaim: immich-fotos-mirjam-pvc
+    mountPath: /external/mirjam_fotos
+    readOnly: false
 
 resources:
   requests:
@@ -129,6 +122,7 @@ resources:
     cpu: {{ .Values.immich.resources.limits.cpu | default "500m" }}
     memory: {{ .Values.immich.resources.limits.memory | default "2048Mi" }}
 {{- end }}
+
 
 {{ if .Values.server.enabled }}
 {{- $ctx := deepCopy . -}}

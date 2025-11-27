@@ -50,6 +50,7 @@ immich:
     # Enabling this will create the service monitors needed to monitor immich with the prometheus operator
     enabled: true
   persistence:
+    # Main data store for all photos shared between different components.
     library:
       existingClaim: immich-data-pvc-prd
 
@@ -103,20 +104,6 @@ server:
   controllers:
     main:
       strategy: RollingUpdate
-      extraVolumes:
-        - name: ext-lightroom-pvc
-          persistentVolumeClaim:
-            claimName: immich-lightroom-pvc
-        - name: ext-mirjam-pvc
-          persistentVolumeClaim:
-            claimName: immich-fotos-mirjam-pvc
-
-      extraVolumeMounts:
-        - name: ext-lightroom-pvc
-          mountPath: /external/lightroom
-        - name: ext-mirjam-pvc
-          mountPath: /external/mirjam_fotos
-
       containers:
         main:
           image:
