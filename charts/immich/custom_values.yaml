@@ -54,6 +54,20 @@ immich:
     library:
       existingClaim: immich-data-pvc-prd
 
+    external-lightroom:
+      enabled: true
+      existingClaim: immich-lightroom-pvc
+      # mountPath is ignored by the chart — the mount name becomes the path:
+      # → /external-lightroom
+      readOnly: false
+
+    external-mirjam:
+      enabled: true
+      existingClaim: immich-fotos-mirjam-pvc
+      # mountPath ignored — becomes:
+      # → /external-mirjam
+      readOnly: false
+
   resources:
     requests:
       cpu: 600m

@@ -103,16 +103,6 @@ persistence:
   data:
     enabled: true
     existingClaim: {{ .Values.immich.persistence.library.existingClaim }}
-  external-lightroom:
-    enabled: true
-    existingClaim: immich-lightroom-pvc
-    mountPath: /external/lightroom
-    readOnly: false
-  external-mirjam:
-    enabled: true
-    existingClaim: immich-fotos-mirjam-pvc
-    mountPath: /external/mirjam_fotos
-    readOnly: false
 
 resources:
   requests:
