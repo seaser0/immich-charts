@@ -100,7 +100,7 @@ server:
     scaleDown:
       stabilizationWindowSeconds: 900
 
-  controllers:
+  controller:
     main:
       strategy: RollingUpdate
       extraVolumes:
@@ -116,7 +116,6 @@ server:
           mountPath: /external/lightroom
         - name: ext-mirjam-pvc
           mountPath: /external/mirjam_fotos
-
 
       containers:
         main:
