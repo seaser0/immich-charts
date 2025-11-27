@@ -114,10 +114,10 @@ server:
       extraVolumeMounts:
         - name: ext-lightroom-pvc
           mountPath: /external/lightroom
-          readOnly: false
         - name: ext-mirjam-pvc
           mountPath: /external/mirjam_fotos
-          readOnly: false
+
+
       containers:
         main:
           image:
