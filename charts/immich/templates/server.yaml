@@ -12,6 +12,23 @@ controllers:
   main:
     type: deployment
     strategy: RollingUpdate
+    # ---------------------------
+    # Passthrough: extra volumes
+    # ---------------------------
+    extraVolumes:
+{{- if .Values.server.controllers.main.extraVolumes }}
+{{ toYaml .Values.server.controllers.main.extraVolumes | indent 6 }}
+{{- end }}
+
+    containers:
+      main:
+        # ---------------------------
+        # Passthrough: extra mounts
+        # ---------------------------
+        extraVolumeMounts:
+{{- if .Values.server.controllers.main.extraVolumeMounts }}
+{{ toYaml .Values.server.controllers.main.extraVolumeMounts | indent 10 }}
+{{- end }}
     containers:
       main:
         env:

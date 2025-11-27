@@ -100,7 +100,7 @@ server:
     scaleDown:
       stabilizationWindowSeconds: 900
 
-  controller:
+  controllers:
     main:
       strategy: RollingUpdate
       extraVolumes:
