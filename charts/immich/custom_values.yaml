@@ -81,10 +81,9 @@ valkey:
   persistence:
     data:
       enabled: true
-      type: persistentVolumeClaim
+      type: emptyDir
       size: 1Gi
       accessMode: ReadWriteOnce
-      storageClass: nfs-csi
 
 # Immich components
 server:
